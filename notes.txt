@@ -1,0 +1,13 @@
+2019/5/21
+Pigeons: they associate random food-giving with lever pressing. No correlation!
+
+2020/10/14
+Maze solving vs periodic growing: latent state (memory)! 
+inner representation of the outside world
+
+genetic osc
+
+evolution vs learning: single generation adaptation
+
+Although genetic oscillator should not support it, there is still evolutionary pressure. 
+Slime using another mechanism to achieve conditional reflex is totally conceivable! 
