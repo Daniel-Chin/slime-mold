@@ -31,5 +31,6 @@ def main():
             with open(filename, 'wb') as f:
                 f.write(res.content)
             j.acc()
+    input('Done! Enter...')
 
 main()
