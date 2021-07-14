@@ -11,3 +11,9 @@ evolution vs learning: single generation adaptation
 
 Although genetic oscillator should not support it, there is still evolutionary pressure. 
 Slime using another mechanism to achieve conditional reflex is totally conceivable! 
+
+7/12
+    blue light does not stop starving SM
+    white light contains purple. use white?
+    did not find any literature on SM & purple light!
+        need help
