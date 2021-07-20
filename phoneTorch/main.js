@@ -1,7 +1,7 @@
 const DEFAULT_GROW_HOURS = 4;
 
-let track = null;
-let zombie;
+let imageCapture;
+let torch_state = false;
 
 let consoleDiv;
 let startTime;
@@ -59,36 +59,23 @@ const initTorch = async () => {
     return;
   }
   alert('Please allow camera access for me to control the torch.');
-  zombie = (await navigator.mediaDevices.getUserMedia({
-    video: {
-      facingMode: 'user',
-    }, 
-  })).getVideoTracks()[0];
-  (await getTrack()).stop();
+  imageCapture = new ImageCapture(await getTrack());
+  if (imageCapture.setOptions === undefined) {
+    print('Error. You need to enable this:');
+    print('chrome://flags/#enable-experimental-web-platform-features');
+  }  
 };
 
 let setTorchLock = false;
 const setTorch = async (state) => {
   if (setTorchLock) return;
-  if (state === (track !== null)) return;
-  if (state) {
-    // turn on
-    setTorchLock = true;
-    track = await getTrack();
-    setTorchLock = false;
-    track.applyConstraints({
-      advanced: [{torch: true}], 
-    }).catch((e) => {
-      print(e);
-      console.error(e);
-    });
-    print(`Torch on.`);
-  } else {
-    // turn off
-    track.stop();
-    track = null;
-    print(`Torch off.`);
-  }
+  if (state === torch_state) return;
+  const fillLightMode = state ? 'torch' : 'flash';
+  setTorchLock = true;
+  await imageCapture.setOptions({ fillLightMode });
+  setTorchLock = false;
+  torch_state = state;
+  print(`Torch: ${state}.`);
 };
 
 const onStartTimeChange = (e) => {
@@ -102,7 +89,7 @@ const onStartTimeChange = (e) => {
 };
 
 const testTorch = () => {
-  setTorch(track === null);
+  setTorch(! torch_state);
 };
 
 const confirm = () => {
