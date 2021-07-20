@@ -1,7 +1,7 @@
 const DEFAULT_GROW_HOURS = 4;
 
-let torchState = false;
-let setTorch;
+let track = null;
+let zombie;
 
 let consoleDiv;
 let startTime;
@@ -13,7 +13,7 @@ window.onload = async () => {
   consoleDiv = document.getElementById('console-div');
   print('Console test ok. ');
   try {
-    setTorch = await initTorch();
+    await initTorch();
   } catch(e) {
     print(e);
     console.error(e);
@@ -45,30 +45,50 @@ const print = (msg) => {
   consoleDiv.innerHTML += msg + '<br />';
 };
 
+const getTrack = async () => (
+  (await navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: 'environment',
+    }, 
+  })).getVideoTracks()[0]
+);
+
 const initTorch = async () => {
   if (! 'mediaDevices' in navigator) {
     print(`Browser doesn't support. Use Chrome. `);
     return;
   }
   alert('Please allow camera access for me to control the torch.');
-  const stream = await navigator.mediaDevices.getUserMedia({
+  zombie = (await navigator.mediaDevices.getUserMedia({
     video: {
-      facingMode: 'environment',
+      facingMode: 'user',
     }, 
-  });
-  const track = stream.getVideoTracks()[0];
-  return (state) => {
-    if (torchState !== state) {
-      track.applyConstraints({
-        advanced: [{torch: state}], 
-      }).catch((e) => {
-        print(e);
-        console.error(e);
-      });
-      print(`Torch: ${state}`);
-      torchState = state;
-    }
-  };
+  })).getVideoTracks()[0];
+  (await getTrack()).stop();
+};
+
+let setTorchLock = false;
+const setTorch = async (state) => {
+  if (setTorchLock) return;
+  if (state === (track !== null)) return;
+  if (state) {
+    // turn on
+    setTorchLock = true;
+    track = await getTrack();
+    setTorchLock = false;
+    track.applyConstraints({
+      advanced: [{torch: true}], 
+    }).catch((e) => {
+      print(e);
+      console.error(e);
+    });
+    print(`Torch on.`);
+  } else {
+    // turn off
+    track.stop();
+    track = null;
+    print(`Torch off.`);
+  }
 };
 
 const onStartTimeChange = (e) => {
@@ -82,11 +102,7 @@ const onStartTimeChange = (e) => {
 };
 
 const testTorch = () => {
-  if (setTorch === undefined) {
-    alert('Torch not initialized yet.');
-    return;
-  }
-  setTorch(! torchState);
+  setTorch(track === null);
 };
 
 const confirm = () => {
