@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head id="head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="main.js"></script>
+  <title>Slime Mold Phone Torch</title>
+</head>
+<body>
+  <div class='console'>
+    --== Console ==-- <br />
+    <div id='console-div'></div>
+    --=============--
+  </div>
+  <div id='panel'>
+    <button class="" onclick='testTorch();'>Test torch</button>
+    <div class='start-div section-div'>
+      <h2>Sequence starts at</h2>
+      <input 
+        type='datetime-local' id='start-time' 
+        class='dark' hidden 
+      />
+      <br />
+      <br />
+      <div id='start-time-delta'>
+        [Wait...]
+      </div>
+    </div>
+    <div class='n-cycles-div section-div'>
+      <h2>How many cycles?</h2>
+      <input 
+        type='number' id='n-cycles' class='dark thin' value=8 
+      />
+    </div>
+    <div class='duty-div section-div'>
+      <h2>Duty cycle?</h2>
+      <input 
+        type='number' id='on-minutes'  class='dark thin' value=45 
+      /> minutes on; 
+      <br />
+      <input 
+        type='number' id='off-minutes' class='dark thin' value=60 
+      /> minutes off; 
+    </div>
+    <button class="go-button" onclick='confirm();'>Confirm</button>
+  </div>
+  <button onclick='location.reload();' class='cancel-button'>
+    Cancel
+  </button>
+</body>

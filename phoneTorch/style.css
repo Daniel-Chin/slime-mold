@@ -1,0 +1,68 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.dark {
+  background-color: black;
+  color: white;
+}
+
+.console {
+  font-family: 'lucida console', 'Courier New', Courier, 'roboto mono', monospace;
+  /* font-weight: bold; */
+  border: gray 1px solid;
+  padding: .5em;
+  font-size: small;
+}
+
+h2 {
+  margin: 0;
+  font-size: large;
+  font-weight: normal;
+}
+
+.section-div {
+  padding: .5em;
+  margin-top: .5em;
+}
+
+.start-div {
+  background-color: #030;
+}
+
+#start-time {
+  font-size: medium;
+}
+
+.n-cycles-div {
+  background-color: #203;
+}
+
+button {
+  font-size: large;
+  margin-top: .5em;
+  border: none;
+  border-radius: .3em;
+  padding: .2em 1em;
+  background-color: #ff0;
+  color: black;
+  font-weight: bold;
+}
+
+.duty-div {
+  background-color: #220;
+}
+
+.thin {
+  width: 5em;
+}
+
+.go-button {
+  background-color: #0ff;
+}
+
+.cancel-button {
+  background-color: #f66;
+}
