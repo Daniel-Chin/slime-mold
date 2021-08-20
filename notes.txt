@@ -17,3 +17,6 @@ Slime using another mechanism to achieve conditional reflex is totally conceivab
     white light contains purple. use white?
     did not find any literature on SM & purple light!
         need help
+
+8/11
+    maybe near the end of the training phase it has to not respond for the testing phase to show negative periodicity. The learned thing cancels the stimuli. 
