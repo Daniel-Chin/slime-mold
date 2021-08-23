@@ -1,8 +1,10 @@
 # download photos from the phone with HTTP server. 
 
 # HOST = 'http://192.168.0.173:7666'
-HOST = 'http://10.209.93.1:7666'
+HOST = 'http://10.209.115.209:7666'
 PATH = '/DCIM/OpenCamera'
+# DEST = 'heavy'
+DEST = '/Volumes/TOSHIBA EXT/!2021'
 LEFT = "<a href='"
 RIGHT = "'>"
 
@@ -14,7 +16,7 @@ from jdt import Jdt
 
 def main():
     res = get(HOST + PATH)
-    os.chdir('heavy')
+    os.chdir(DEST)
     dir_name = datetime.today().strftime('%Y-%m-%d')
     os.mkdir(dir_name)
     os.chdir(dir_name)
