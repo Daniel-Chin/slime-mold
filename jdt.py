@@ -10,10 +10,18 @@ with Jdt(500, 'loading...') as j:
 ```
 
 Run this file to see demo.  
+
+Set `override_terminal_width` when using Jupyter Notebook with jdt. 
 '''
 from time import time
 from math import log
 from terminalsize import get_terminal_size
+from graphic_terminal import clearLine
+
+override_terminal_width = None
+
+def effectiveTermWidth():
+    return override_terminal_width or get_terminal_size()[0]
 
 class JdtAlreadyClosedError(BaseException):
     '''Cannot update Jdt after complete. '''
@@ -45,6 +53,7 @@ class Jdt:
         self.UPP = UPP
         self.UPP_count = 0
         # updates per print
+        self.print_mode = False
 
     def getSuffix(self, done, progress):
         return '%s Total: %d Done: %d' % (
@@ -57,15 +66,15 @@ class Jdt:
         if not self.active:
             raise JdtAlreadyClosedError
         self.done = new_done
-        if not flush and self.UPP_count != self.UPP:
-            self.UPP_count += 1
+        if not flush and self.UPP_count > 0:
+            self.UPP_count -= 1
             return
-        self.UPP_count = 0
+        self.UPP_count = self.UPP - 1
         if self.goal == 0:
             progress = 1
         else:
             progress = new_done / self.goal
-        terminal_width = get_terminal_size()[0] - 4
+        terminal_width = effectiveTermWidth() - 4
         if getSuffix is None:
             getSuffix = self.getSuffix
         suffix = getSuffix(new_done, progress)
@@ -84,6 +93,7 @@ class Jdt:
               '[', symbol * bar_fill_width, '_'*bar_empty_width, ']', 
               ' ', suffix, 
               sep = '', end='',flush=True)
+        self.print_mode = False
 
     def acc(self):
         self.update(self.done + 1)
@@ -94,6 +104,14 @@ class Jdt:
         self.update(self.goal, symbol = '#', getSuffix = getSuffix, flush = True)
         self.active = False
         print()
+    
+    def print(self, *args, **kw):
+        if not self.print_mode:
+            self.print_mode = True
+            clearLine()
+            print()
+            print(f'jdt {self.done} / {self.goal}')
+        print(*args, **kw)
     
     def __enter__(self):
         return self
@@ -133,8 +151,8 @@ def jdtIter(iterable, *args, **kw):
     '''
     with Jdt(len(iterable), *args, **kw) as j:
         for x in iterable:
-            j.acc()
             yield x
+            j.acc()
 
 if __name__=='__main__':
     from time import sleep
@@ -146,8 +164,15 @@ if __name__=='__main__':
 
     with Jdt(500, 'launching game') as j:
         for i in range(500):
-            j.acc()
+            if i == 200:
+                j.print('Something happens!')
+                j.print('Logging information')
+                j.print('more information haha')
+            if i == 300:
+                j.print('Something else happens!')
+                j.print('Logging information')
             sleep(0.01)
+            j.acc()
 
     for i in jdtIter(range(500), 'jdtIter test'):
         sleep(0.01)
