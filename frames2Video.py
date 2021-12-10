@@ -7,6 +7,7 @@ from os.path import splitext, dirname, isdir, join, \
 
 # FFMPEG = 'ffmpeg'
 FFMPEG = '~/Downloads/ffmpeg'
+EXT = '.jpg'
 
 def main():
     folder = input('Drag folder/photo here and press Enter: ')
@@ -23,9 +24,13 @@ def main():
     dest_names = []
     for i, fn in enumerate(files):
         _, ext = splitext(fn)
+        assert ext.lower() == EXT
         dest_names.append(f'{i}{ext}')
     if set(files).intersection(dest_names):
-        print('Already did rename. Skipping. ')
+        if set(files) == set(dest_names):
+            print('Already did rename. Skipping. ')
+        else:
+            print('Unexpected scenario 3489pfweah3tqp2h53tp')
     else:
         with Jdt(n) as j:
             for fn, dest in zip(files, dest_names):
@@ -34,7 +39,7 @@ def main():
         print('Rename complete. ')
     os.chdir(folder)
     base = basename(folder)
-    command = f'{FFMPEG} -r 30 -i %d.jpg ../{base}.mp4'
+    command = f'{FFMPEG} -r 30 -i %d.{ext} ../{base}.mp4'
     print(command)
     os.system(command)
     print('Success.')

@@ -3,8 +3,8 @@
 # HOST = 'http://192.168.0.173:7666'
 HOST = 'http://10.209.115.209:7666'
 PATH = '/DCIM/OpenCamera'
-# DEST = 'heavy'
-DEST = '/Volumes/TOSHIBA EXT/!2021'
+DEST = 'heavy'
+# DEST = '/Volumes/TOSHIBA EXT/!2021'
 LEFT = "<a href='"
 RIGHT = "'>"
 
@@ -25,14 +25,18 @@ def main():
         for part in parts:
             fullname = part.split(RIGHT, 1)[0]
             _, filename = path.split(fullname)
-            if filename == '..':
+            try:
+                if filename == '..':
+                    continue
+                # print(filename)
+                if path.isfile(filename):
+                    print(filename, 'already here. ')
+                    continue
+                res = get(HOST + fullname)
+                with open(filename, 'wb') as f:
+                    f.write(res.content)
+            finally:
                 j.acc()
-                continue
-            # print(filename)
-            res = get(HOST + fullname)
-            with open(filename, 'wb') as f:
-                f.write(res.content)
-            j.acc()
     input('Done! Enter...')
 
 main()
