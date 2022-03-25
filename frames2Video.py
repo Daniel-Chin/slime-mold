@@ -11,7 +11,7 @@ EXT = '.jpg'
 
 def main():
     folder = input('Drag folder/photo here and press Enter: ')
-    folder = folder.replace('\\', '').rstrip(' ')
+    folder = folder.replace('\\', '/').rstrip(' ')
     if not isdir(folder):
         os.chdir(dirname(folder))
     os.chdir(folder)
@@ -39,7 +39,7 @@ def main():
         print('Rename complete. ')
     os.chdir(folder)
     base = basename(folder)
-    command = f'{FFMPEG} -r 30 -i %d.{ext} ../{base}.mp4'
+    command = f'{FFMPEG} -r 30 -i %d{ext} ../{base}.mp4'
     print(command)
     os.system(command)
     print('Success.')
